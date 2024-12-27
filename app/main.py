@@ -8,13 +8,8 @@ class Person:
 
 
 def create_person_list(people: list) -> list:
-    person_list = []
-
-    for person in people:
-        person_list.append(Person(
-            name=person["name"],
-            age=person["age"]
-        ))
+    person_list = [Person(name=person["name"],
+                          age=person["age"]) for person in people]
 
     def get_partner_pointer(partner_name: str) -> Person:
         nonlocal person_list
@@ -23,16 +18,11 @@ def create_person_list(people: list) -> list:
                 return person
 
     for i in range(len(person_list)):
-        if "wife" in people[i]:
-            if not people[i]["wife"]:
-                continue
-            else:
-                person = person_list[i]
-                person.wife = get_partner_pointer(people[i]["wife"])
-        elif not people[i]["husband"]:
-            continue
-        else:
-            person = person_list[i]
-            person.husband = get_partner_pointer(people[i]["husband"])
+        person = person_list[i]
+        pair_name = people[i].get("wife")
+        if pair_name:
+            person.wife = get_partner_pointer(pair_name)
+        elif people[i].get("husband"):
+            person.husband = get_partner_pointer(people[i].get("husband"))
 
     return person_list
